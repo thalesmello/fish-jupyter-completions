@@ -25,16 +25,11 @@ end
 function __fish_jupyter_using_command
   set prefix 0
   set include_opts 0
-  getopts $argv | while read -l key option
-    switch $key
-      case _
-        set cmd_to_match $cmd_to_match $option
-      case prefix
-        set prefix 1
-      case include_opts
-        set include_opts 1
-    end
-  end
+  argparse 'i/include_opts' 'p/prefix' -- $argv
+
+  set cmd_to_match $argv
+  set -q $_flat_i; and set include_opts 1
+  set -q $_flat_p; and set prefix 1
 
   set cmd (__fish_jupyter_get_cmd $include_opts)
 
